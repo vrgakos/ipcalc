@@ -81,3 +81,39 @@ func (r *Range) GetIpByOffset(offset uint128.Uint128) net.IP {
 
 	return nil
 }
+
+func (r *Range) GetOffsetByIp(ip string) (uint128.Uint128, error) {
+	netIp := net.ParseIP(ip)
+	if netIp == nil {
+		return uint128.Zero, fmt.Errorf("could not parse ip")
+	}
+
+	intIp, bits := ipToInt(netIp)
+	if bits != r.Bits {
+		return uint128.Zero, fmt.Errorf("range has different bits length than ip address")
+	}
+
+	if intIp.Cmp(r.Start) == -1 {
+		return uint128.Zero, fmt.Errorf("ip address out of range, its before start")
+	}
+
+	if intIp.Cmp(r.End) == 1 {
+		return uint128.Zero, fmt.Errorf("ip address out of range, its after end")
+	}
+
+	offset := intIp.SubWrap(r.Start)
+	if offset.Cmp(r.Size) >= 0 {
+		return uint128.Zero, fmt.Errorf("offset out of range")
+	}
+
+	return offset, nil
+}
+
+func (r *Range) GetOffset64ByIp(ip string) (uint64, error) {
+	offset, err := r.GetOffsetByIp(ip)
+	if err != nil {
+		return 0, err
+	}
+
+	return offset.Lo, nil
+}
