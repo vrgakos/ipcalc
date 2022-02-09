@@ -217,6 +217,10 @@ func (s *Subnet) GetNetwork() net.IP {
 	return intToIPv4(s.NetInt)
 }
 
+func (s *Subnet) GetNetworkStr() string {
+	return s.GetNetwork().String()
+}
+
 //
 func (s *Subnet) CommonOnes(s2 *Subnet, checkOnes bool) uint8 {
 	// fmt.Printf(" CommonOnes %s %s\n", s, s2)
