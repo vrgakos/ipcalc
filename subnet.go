@@ -338,3 +338,7 @@ func (s *Subnet) GetVersion() int8 {
 		return 4
 	}
 }
+
+func (s *Subnet) IsHostAddress() bool {
+	return (s.isIPv6 && s.NetOnes == 128) || (!s.isIPv6 && s.NetOnes == 32)
+}
