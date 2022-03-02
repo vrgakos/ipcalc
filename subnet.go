@@ -330,3 +330,11 @@ func (s *Subnet) level() int {
 func (s *Subnet) IsIPv6() bool {
 	return s.isIPv6
 }
+
+func (s *Subnet) GetVersion() int8 {
+	if s.isIPv6 {
+		return 6
+	} else {
+		return 4
+	}
+}
