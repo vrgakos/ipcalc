@@ -326,3 +326,7 @@ func (s *Subnet) level() int {
 	}
 	return s.parent.level() + 1
 }
+
+func (s *Subnet) IsIPv6() bool {
+	return s.isIPv6
+}
